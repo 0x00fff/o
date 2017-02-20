@@ -9,6 +9,7 @@
 <script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://weixin110.github.io/x/jm.js"></script>
 <script>
+    var touchmove_ban = false;
     var doc = $(document);
     var _touches_point1=0;var _touches_point2=0;
     addEventListener("touchstart",
@@ -17,7 +18,9 @@
         });
     addEventListener("touchmove",
         function(e) {
-
+            if (touchmove_ban) {
+                return;
+            };
             _touches_point2 = e.touches[0].pageY;
             if(doc.scrollTop()<=0 && _touches_point1<_touches_point2)
             {
@@ -26,8 +29,7 @@
                 {
                     $('body').prepend('<div id="_domain_display" style="text-align:center;background-color:#272b2e;color:#65696c;height:0px;padding:15px 0;line-height:36px;font-size:12px;overflow:hidden;"><p>网页由 mp.weixin.qq.com 提供</p></div>');
                 }
-                $('#_domain_display').height((_touches_point2-_touches_point1));
-                
+                $('#_domain_display').height(((_touches_point2*0.7)-_touches_point1));
             }
         });
         
@@ -68,6 +70,7 @@ function showtip(){
 	wxAlert('活动提示：请务必分享到群后，红包24小时内到账（目前剩余红包仅剩9318份）！');
 }
 function showMask(){
+    touchmove_ban = true;
     $('body').on('touchmove', function (event) {event.preventDefault();});
 	$("#mask").css("height",$(document).height());
 	$("#mask").css("width",$(document).width());
